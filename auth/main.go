@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -31,14 +32,30 @@ func authRequestHandler(w http.ResponseWriter, r *http.Request) {
 
 	if authUser == "" || authPass == "" || !(authUser == "admin" && authPass == "password") {
 		w.Header().Set("Auth-Status", "Invalid login or password")
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusUnauthorized)
+
+		response := map[string]string{
+			"status":  "error",
+			"message": "Invalid login or password",
+		}
+		jsonResponse, _ := json.Marshal(response)
+		w.Write(jsonResponse)
 		return
 	}
 
 	w.Header().Set("Auth-Status", "OK")
 	w.Header().Set("Auth-Server", "127.0.0.1")
 	w.Header().Set("Auth-Port", "1993")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+
+	response := map[string]string{
+		"status":  "success",
+		"message": "Authentication successful",
+	}
+	jsonResponse, _ := json.Marshal(response)
+	w.Write(jsonResponse)
 }
 
 func main() {
@@ -60,5 +77,5 @@ func main() {
 
 	http.HandleFunc("/auth", authRequestHandler)
 	fmt.Println("HTTP сервер запущен на порту 9000 для auth_request")
-	log.Fatal(http.ListenAndServe("0.0.0.0:9000", nil))
+	log.Fatal(http.ListenAndServe("127.0.0.1:9000", nil))
 }
