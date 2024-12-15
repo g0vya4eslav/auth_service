@@ -29,7 +29,6 @@ func authRequestHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Authenticating user: %s", authUser)
 
-	// Проверка учетных данных
 	if authUser == "" || authPass == "" || !(authUser == "admin" && authPass == "password") {
 		w.Header().Set("Auth-Status", "Invalid login or password")
 		w.WriteHeader(http.StatusUnauthorized)
@@ -37,8 +36,8 @@ func authRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Auth-Status", "OK")
-	w.Header().Set("Auth-Server", "127.0.0.1") // Сервер IMAP
-	w.Header().Set("Auth-Port", "1993")        // Порт IMAP
+	w.Header().Set("Auth-Server", "127.0.0.1")
+	w.Header().Set("Auth-Port", "1993")
 	w.WriteHeader(http.StatusOK)
 }
 
