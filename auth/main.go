@@ -77,5 +77,8 @@ func main() {
 
 	http.HandleFunc("/auth", authRequestHandler)
 	fmt.Println("HTTP сервер запущен на порту 9000 для auth_request")
-	log.Fatal(http.ListenAndServe("127.0.0.1:9000", nil))
+	err := http.ListenAndServe("0.0.0.0:9000", nil)
+	if err != nil {
+		log.Fatal("Ошибка при запуске HTTP-сервера: ", err)
+	}
 }
