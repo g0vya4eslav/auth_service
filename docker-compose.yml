@@ -1,3 +1,4 @@
+
 services:
   auth_service:
     build:
@@ -27,9 +28,6 @@ services:
 
 networks:
   auth_net:
-
-
-
 
 
 
